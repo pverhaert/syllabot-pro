@@ -4,4 +4,4 @@ streamlit~=1.41.1
 pydantic~=2.10.6
 python-dotenv~=1.0.1
 pandas~=2.2.3
-pypandoc~=1.15
+pypandoc_binary~=1.15
