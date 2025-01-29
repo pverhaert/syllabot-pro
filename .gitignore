@@ -1,0 +1,13 @@
+.venv
+.idea
+.vscode
+.env
+models.py
+qodana.yaml
+__pycache__
+course_history
+course_latest
+*_1*
+_TODO.txt
+!course_templates
+*~

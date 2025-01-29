@@ -1,0 +1,36 @@
+outline_task:
+  description: >
+    - Develop a comprehensive and detailed course outline for a course about "{course}". 
+    - Take special needs ({special_needs}) into account to ensure the course is accessible and inclusive. 
+    - Always keep the target audience ({target_audience}) in mind.
+    - Ensure all content, including the headings, are written in {language}.
+    - Writing style: {writing_style}.
+    - Vary vocabulary instead of repeating terms.
+    - Include at least {num_chapters} or more **unique** chapters.
+    - Use markdown bullet points (**only one level**) for every topic inside a chapter.
+    - Don't mention anything about exercises.
+  expected_output: >
+    course_description_title:
+      "Course description" (but translated to {language})
+    course_description:
+      a lang and engaging description of this course, formatted in propper markdown paragraphs.
+      use "\n\n" between paragraphs.
+    outline_title:
+      "Outline" (but translated to {language})
+    chapters:
+      Title: 
+        the title for this chapter
+      topics:
+        a **one level** list of topics to discuss
+    resource_title:
+      "Additional resources" (but translated to {language})
+    resources:
+      title: title of the external resource
+      url: URL of the external resource
+      description: short description of the external resource
+    learning_outcomes_title:
+      "Learning outcomes" (but translated to {language})
+    learning_outcomes:
+      a detailed and engaging summary of this course, formatted in propper markdown paragraphs.
+      use "\n\n" between paragraphs.
+  agent: outline_creator

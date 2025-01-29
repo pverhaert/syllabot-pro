@@ -1,0 +1,56 @@
+content_task:
+  description: >
+    - Develop a comprehensive and detailed chapter for a course about "{course}".
+    - Limit the chapter to: {chapter_title} : {chapter_topics}
+    - Take special needs ({special_needs}) into account to ensure the course is accessible and inclusive. 
+    - Always keep the target audience ({target_audience}) in mind.
+    - Include several examples to clarify the theoretical background.
+    - Choose the best method (code, formulas, mermaid diagrams) appropriate to the topic to support the examples.
+    - Never use images!
+    - Ensure all content, including the titles and examples, are written in {language}.
+    - Explain this like you're talking from a teacher to a student. 
+    - Writing style: {writing_style}.
+    - Vary vocabulary instead of repeating terms.
+    - All chapters in this course: {all_chapters}.
+    - Use approximately {word_length} words for this chapter!
+    - **Don't ask follow-up questions!**
+
+  expected_output: >
+    "main_title": 
+      the main title for this chapter.
+    "topics": 
+      a Python list of all the topics in this chapter with:
+        "sub_title":
+          the subtitle of the topic.
+        "content":
+          - A full, detailed and engaging explanation of the topic.
+          - Don't include the "sub_title" in the content!
+          - If the content includes titles, then start from level 5 heading for this (##### title \n\n).
+
+  agent: content_creator
+
+
+markdown_fixer_task:
+  description: >
+    Transform the content inside the "content" section into properly formatted markdown while maintaining perfect content integrity.
+
+  expected_output: >
+    - Receive the raw content from the content_creator agent
+    - Apply proper markdown formatting rules for the "content" sections:
+      * Ensure headers use correct hierarchy (h5 and below only)
+      * Format code blocks with appropriate language tags
+      * Structure lists with proper indentation and symbols
+      * Format tables with aligned columns
+      * Apply correct emphasis (bold, italic) syntax
+      * Ensure proper spacing between elements
+      * Format links and images correctly
+      * Escape characters with a backslash (\) where needed
+      * Also, escape all double quotes with a backslash if it is not already there! 
+          Fault: ... "content here" ... (no backslash in front of " -> escape it)
+          Good: ... \"content here\" ... (backslash in front of " -> do nothing)
+    - Preserve all original content exactly as provided
+    - Maintain the JSON structure of the content
+    - Never modify the actual content or meaning
+    - Never add or remove information
+
+  agent: markdown_fixer

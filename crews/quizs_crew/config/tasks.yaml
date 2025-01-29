@@ -1,0 +1,64 @@
+quiz_task:
+  description: >
+    - Create at last {num_quizzes} or more high-quality kahoot-like quiz questions for an educational course about: {main_title}.
+    - Limit the questions to the information this chapter: 
+        {main_content}
+    - Take special needs ({special_needs}) into account to ensure the quizzes are accessible and inclusive. 
+    - Always keep the target audience ({target_audience}) in mind.
+    - Ensure all content, including the headings and questions, are written in {language}.
+    - Wrap all code-examples inside a markdown code-blok.
+    - Writing style: {writing_style}.
+    - Vary vocabulary instead of repeating terms.
+    - Clearly indicate the difficulty level in the title for the questions by adding asterisks as "\*" (not "*"):
+      - Title of an easy question \*
+      - Title of a medium question \*\*
+      - Title of an advanced question \*\*\*
+    - Every question should have 5 or 6 possible answers, grouped in a list.
+    - Every possible answer should start with A, B, ...
+    - **Don't ask follow-up questions!**
+  expected_output: >
+    High quality, multiple choice questions for the course.
+    
+    "main_title": the original main_title (don't change it) 
+    "quizzes":
+      A python list of quizzes.
+      For each quiz, include the following parts:
+      - "title": a short, descriptive title for this exercise, with asterisks
+      - "question": 
+        - a markdown formated question, stated with word "_**Question**_\n\n" (but translated to {language})
+      - "answers":
+        - A list of 5 or more possible answers (and use code blocks if applicable). Example output:
+          ["**A**: possible answer 1", "**B**: possible answer 2", ...]
+      - "correct_answer": 
+        - a markdown formated answer, stated with the translated word "_**Correct answer**_:\n\n" (but translated to {language}),
+          followed by the correct latter answer. Example output: 
+            "_**Correct answer**_: _**B**_:  (answer for option B)" 
+      - "explanation": question
+        - a markdown formated explanation, stated with the translated word "_**Explanation**_\n\n" (but translated to {language})
+        - a detailed explanation of the correct answer in plain text, codeblocks or bullet points
+
+  agent: quiz_creator
+
+markdown_fixer_task:
+  description: >
+    Transform the content inside the "title", "question", "answers", "answer" and "explanation" sections into properly formatted markdown while maintaining perfect content integrity.
+
+  expected_output: >
+    - Receive the raw content from the exercises_creator agent
+    - Apply proper markdown formatting rules for the "title", "question" "answers", "answer" and "explanation" sections:
+      * Format code blocks with appropriate language tags
+      * Structure lists with proper indentation and symbols
+      * Format tables with aligned columns
+      * Apply correct emphasis (bold, italic) syntax
+      * Ensure proper spacing between elements
+      * Format links and images correctly
+      * Escape characters with a backslash (\) where needed
+      * Also, escape all double quotes with a backslash if it is not already there! 
+          Fault: ... "content here" ... (no backslash in front of " -> escape it)
+          Good: ... \"content here\" ... (backslash in front of " -> do nothing)
+    - Preserve all original content exactly as provided
+    - Maintain the JSON structure of the content
+    - Never modify the actual content or meaning
+    - Never add or remove information
+
+  agent: markdown_fixer

@@ -1,0 +1,16 @@
+filename_task:
+  description: >
+    Invent a simple, meaningful but also an engaging "filename" for a markdown document that describes the course "{course}".
+    Write everything in {language}
+  expected_output: >
+    "file_name":
+      - **ONLY RESPOND WITH ONE FILENAME**, replace whitespace with underscores and don't add any extension.
+      - Don't mention the word "course" in the document name.
+      - max length: 50 characters
+      - Examples:
+          "css_nesting_fundamentals"
+          "javascript_loops_masterclass"
+    "course_main_title": an inspiring title for the course
+    "course_content_title": just translate "course content" to {language} don't add anything else!
+    "exersice_title": just translate the word "exercises" to {language} don't add anything else!
+  agent: filename_creator
