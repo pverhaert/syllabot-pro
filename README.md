@@ -66,7 +66,7 @@ Run `install.bat` to:
 ### Example `.env` file:
 ```
 SERPER_API_KEY=
-# AGENTOPS_API_KEY=  # not implemeted yet
+# AGENTOPS_API_KEY=  # not implemented yet
 
 GROQ_API_KEY=
 GEMINI_API_KEY=
