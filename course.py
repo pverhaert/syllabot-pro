@@ -24,7 +24,7 @@ def main(word_lenght=None):
     create_folders()
     # Streamlit app
     with open('assets/logo-tm.svg') as f:
-        st.markdown(f'<div id="main_header">{f.read()}<p>ITF SyllaBot Pro <span>(v0.1.0)</span></p></div>',
+        st.markdown(f'<div id="main_header">{f.read()}<p>ITF SyllaBot Pro <span>(v0.2.0)</span></p></div>',
                     unsafe_allow_html=True)
 
     # Sidebar
@@ -34,6 +34,7 @@ def main(word_lenght=None):
         # Input parameters
         language = st.text_input("Language for this course", value="English")
         course = st.text_input("Write a course about", value="", placeholder="Short description of the topic")
+        chapters_that_must_be_included = st.text_area("Chapters/topics that must be included", value="", placeholder="Optional")
         special_needs = st.text_area("Special needs to take into account?", value="", placeholder="Optional")
         target_audience = st.text_input("Target audience", value="", placeholder="Optional")
         writing_style = st.selectbox(
@@ -81,11 +82,14 @@ def main(word_lenght=None):
                 error_message = "\n".join([f"❌ {error}\n" for error in errors])
                 error_container.error(error_message)
             else:
+                if chapters_that_must_be_included == "":
+                    chapters_that_must_be_included = "I leave it to you"
                 if target_audience == "":
                     target_audience = "see writing style"
                 inputs = {
                     'language': language,
                     'course': course,
+                    'chapters_that_must_be_included': chapters_that_must_be_included,
                     'special_needs': special_needs,
                     'target_audience': target_audience,
                     'writing_style': writing_style,

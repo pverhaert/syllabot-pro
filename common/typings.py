@@ -37,7 +37,7 @@ class CourseOutline(BaseModel):
 # Content for one chapter ---------------------------------------------------------------------------------------
 class ChapterContent(BaseModel):
     sub_title: str = Field(description="Subtitle for one section of the chapter")
-    content: str = Field(description="Content for this section, containing markdown code")
+    content: str = Field(description="Content for this section")
 
 
 class OneChapter(BaseModel):
@@ -47,15 +47,15 @@ class OneChapter(BaseModel):
 
 # Content for exercises ---------------------------------------------------------------------------------------
 class OneExercise(BaseModel):
-    title: str
-    question: str
-    solution: str
-    explanation: str
+    title: str = Field(description="Title of the exercise")
+    question: str = Field(description="The question")
+    solution: str = Field(description="The solution")
+    explanation: str = Field(description="Explanation of the solution")
 
 
 class ExercisesContent(BaseModel):
-    main_title: str
-    exercises: List[OneExercise]
+    main_title: str = Field(description="Main title of the exercise section")
+    exercises: List[OneExercise] = Field(description="A list of exercises with a title, a question, a solution and an explanation of the solution")
 
 
 # Content for quiz ---------------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ class OneQuestion(BaseModel):
 
 
 class QuizContent(BaseModel):
-    main_title: str = Field(description="Main title of the chapter")
+    main_title: str = Field(description="Main title of the quiz section")
     quizzes: List[OneQuestion] = Field(description="A list of questions with a title, a question, a list of possible answers, the correct answer and an explanation of the correct answer")
 
 

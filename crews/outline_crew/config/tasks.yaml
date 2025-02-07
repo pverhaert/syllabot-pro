@@ -1,6 +1,7 @@
 outline_task:
   description: >
     - Develop a comprehensive and detailed course outline for a course about "{course}". 
+    - Be sure to include the following chapters or sections: {chapters_that_must_be_included}.
     - Take special needs ({special_needs}) into account to ensure the course is accessible and inclusive. 
     - Always keep the target audience ({target_audience}) in mind.
     - Ensure all content, including the headings, are written in {language}.

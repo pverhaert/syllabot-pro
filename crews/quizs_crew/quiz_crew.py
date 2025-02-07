@@ -30,28 +30,13 @@ class QuizCrew():
 
     @task
     def quiz_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['quiz_task'],
-        )
-
-    @agent
-    def markdown_fixer(self) -> Agent:
-        tools = [self.search_tool] if self.search_tool else []
-        return Agent(
-            llm=self.llm,
-            verbose=True,
-            tools=tools,
-            config=self.agents_config['markdown_fixer'],
-        )
-
-    @task
-    def markdown_fixer_task(self, ) -> Task:
         txt_file = f"course_latest/6_{self.i}_quiz.txt"
         return Task(
-            config=self.tasks_config['markdown_fixer_task'],
+            config=self.tasks_config['quiz_task'],
             output_pydantic=QuizContent,
             output_file=txt_file,
         )
+
     @crew
     def crew(self) -> Crew:
         return Crew(

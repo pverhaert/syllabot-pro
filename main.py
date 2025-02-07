@@ -45,6 +45,7 @@ class Metrics(BaseModel):
 class CourseInputs(BaseModel):
     language: str = "English"
     course: str = "JavaScript functions"
+    chapters_that_must_be_included: str = ""
     special_needs: str = ""
     target_audience: str = ""
     writing_style: str = ""
@@ -64,7 +65,7 @@ class CourseInputs(BaseModel):
 class CourseState(BaseModel):
     inputs: CourseInputs = CourseInputs()  # input fields from Streamlit
     titles: Titles = ""  # Filename.name = title for the final file (yyyymmdd_hhmmss_file_name.md)
-    course_outline: Optional[CourseOutline] = None  #
+    course_outline: List[CourseOutline] = []  #
     chapters: List[OneChapter] = []
     exercises: List[ExercisesContent] = []
     quizzes: List[QuizContent] = []
@@ -138,7 +139,7 @@ class CourseFlow(Flow[CourseState]):
         crew = OutlineCrew(inputs=config)
         inputs = {
             attr: getattr(self.state.inputs, attr)
-            for attr in ['course', 'language', 'special_needs', 'target_audience', 'num_chapters', 'writing_style']
+            for attr in ['course', 'language', 'chapters_that_must_be_included', 'special_needs', 'target_audience', 'num_chapters', 'writing_style']
         }
         result = crew.crew().kickoff(inputs=inputs)
         pydantic_content = result.pydantic
@@ -161,6 +162,8 @@ class CourseFlow(Flow[CourseState]):
         Returns: None.
         """
         all_chapters = self.state.course_outline.chapters
+        # convert all_chapters to a dict with only title and topics
+        all_chapters_dict = [{"title": chapter.title, "topics": chapter.topics} for chapter in all_chapters]
         for i, chapter in enumerate(self.state.course_outline.chapters, start=1):
             if self.state.inputs.test_mode and i >= 3: return  # test mode: only generate 2 chapters
             if i > 0: time.sleep(self.state.inputs.timeout)  # wait xx sec between 2 chapters
@@ -184,9 +187,15 @@ class CourseFlow(Flow[CourseState]):
                 'word_length': self.state.inputs.word_length,
                 "chapter_title": chapter.title,
                 "chapter_topics": chapter.topics,
-                "all_chapters": all_chapters,
+                "all_chapters": all_chapters_dict,
             }
+            console.print(f"\n*-*-* BEFORE kickoff *-*-*-*-\n", style="white on blue")
             result = crew.crew().kickoff(inputs=inputs)
+            console.print(f"\n*-*-* AFTER kickoff *-*-*-*-\n", style="white on blue")
+            console.print(f"\n*-*-* {result} *-*-*-*-\n", style="white on blue")
+            console.print(f"\n*-*-* END OF PRINT *-*-*-*-\n", style="white on blue")
+
+
             pydantic_content = result.pydantic
             console.print(f"\n*-*-* {i}/{len(self.state.course_outline.chapters)} CHAPTERS CREATED *-*-*-*-\n",
                           pydantic_content, "\n*-*-*-*-\n")

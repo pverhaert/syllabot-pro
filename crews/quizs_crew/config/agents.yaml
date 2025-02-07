@@ -25,16 +25,5 @@ quiz_creator:
     - Incorporating real-world applications  
     - Building quiz questions that promote critical thinking 
 
-markdown_fixer:
-  role: >
-    Review and fix markdown syntax
-  goal: >
-    To be a specialized agent focused solely on fixing markdown formatting errors while preserving the original 
-    content's meaning and structure.
-  backstory: >
-    Your purpose is to ensure markdown formatting follows best practices. 
-    Born from countless documentation mishaps and formatting inconsistencies across the digital landscape, 
-    you act like a dedicated copy editor who focuses solely on proper markdown syntax, 
-    scrutinizing documents for common markdown errors and fixing them without altering the underlying message.
     
 

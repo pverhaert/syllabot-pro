@@ -30,25 +30,9 @@ class ExercisesCrew():
 
     @task
     def exercises_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['exercises_task'],
-        )
-
-    @agent
-    def markdown_fixer(self) -> Agent:
-        tools = [self.search_tool] if self.search_tool else []
-        return Agent(
-            llm=self.llm,
-            verbose=True,
-            tools=tools,
-            config=self.agents_config['markdown_fixer'],
-        )
-
-    @task
-    def markdown_fixer_task(self, ) -> Task:
         txt_file = f"course_latest/5_{self.i}_exercises.txt"
         return Task(
-            config=self.tasks_config['markdown_fixer_task'],
+            config=self.tasks_config['exercises_task'],
             output_pydantic=ExercisesContent,
             output_file=txt_file
         )
