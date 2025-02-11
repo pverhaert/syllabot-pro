@@ -166,7 +166,7 @@ class CourseFlow(Flow[CourseState]):
         # convert all_chapters to a dict with only title and topics
         all_chapters_dict = [{"title": chapter.title, "topics": chapter.topics} for chapter in all_chapters]
         for i, chapter in enumerate(self.state.course_outline.chapters, start=1):
-            if self.state.inputs.test_mode and i >= 2: return  # test mode: only generate 2 chapters
+            if self.state.inputs.test_mode and i >= 3: return  # test mode: only generate 2 chapters
             if i > 0: time.sleep(self.state.inputs.timeout)  # wait xx sec between 2 chapters
             console.print(
                 f"\nCreating content for chapter {i}/{len(self.state.course_outline.chapters)}: {chapter.title}\n",
