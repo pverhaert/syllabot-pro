@@ -59,7 +59,7 @@ def main(word_lenght=None):
                                        help="Enable or disable web search in the generated content")
         col1, col2, col3 = st.columns(3)
         with col1:
-            num_chapters = st.number_input("Nr of chapters", value=5, min_value=0)
+            num_chapters = st.number_input("Min nr of chapters", value=5, min_value=0)
         with col2:
             num_exercises = st.number_input("Nr of Exercises/chapter", value=10, min_value=0)
         with col3:

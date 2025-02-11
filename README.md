@@ -95,6 +95,7 @@ OTEL_SDK_DISABLED=true
 ## Configuration Options
 - **Course Language**: Specify target language.
 - **Course Topic**: Define course subject.
+- **Chapters/topics that must be included**: Specific chapters to include. If empty, the LLM will generate chapters based on the topic.
 - **Special Requirements**: Optional specific topics to cover.
 - **Target Audience**: Optional audience specification.
 - **Model Selection**: Choose AI model.
@@ -102,7 +103,7 @@ OTEL_SDK_DISABLED=true
 - **Technical Settings**:
   - Chapter timeout (seconds): Timeout between 2 API calls to avoid rate limiting
   - Words per chapter.
-  - Number of chapters.
+  - Minimum number of chapters.
   - Exercises per chapter.
   - Quiz questions per chapter.
   - Temperature (0-1): The higher the temperature, the more diverse the course will be, but also the more hallucination you can expect.
