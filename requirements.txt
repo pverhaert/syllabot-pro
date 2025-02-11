@@ -1,4 +1,4 @@
-crewai[tools]~=0.98.0
+crewai[tools]~=0.100.0
 agentops~=0.3.26
 streamlit~=1.41.1
 pydantic~=2.10.6

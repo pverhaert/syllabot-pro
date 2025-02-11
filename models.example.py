@@ -1,12 +1,18 @@
 Models = [
     {
-        "model": "gemini/gemini-2.0-flash-exp",
+        "model": "gemini/gemini-2.0-flash",
+        "max_output_tokens": 8.192,
+        "price_input": 0.1,
+        "price_output": 0.4
+    },
+    {
+        "model": "gemini/gemini-2.0-pro-exp-02-05",
         "max_output_tokens": 8.192,
         "price_input": 0,
         "price_output": 0
     },
     {
-        "model": "gemini/gemini-2.0-flash-thinking-exp",
+        "model": "gemini/gemini-2.0-flash-thinking-exp-01-21",
         "max_output_tokens": 8.192,
         "price_input": 0,
         "price_output": 0

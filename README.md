@@ -7,10 +7,11 @@ This repository facilitates the creation of educational courses using [CrewAI](h
 - `course_history`: Stores all generated courses in three formats (two Word formats and one Markdown format).
 
 > [!CAUTION]
-> - Always verify results as LLMs can produce inaccurate information.
+> - If course creation fails, try lowering the word count limit or using a different LLM.
+> - Always verify results, as LLMs can produce inaccurate information.
 > - Generate multiple courses for content variety.
 > - Test different models to determine optimal performance.
-> - For non-English content, verify model's language capabilities.
+> - For non-English content, verify the model’s language capabilities.
 > - Use generated content as a foundation for further course development.
 
 ## Requirements
@@ -24,12 +25,17 @@ This repository facilitates the creation of educational courses using [CrewAI](h
    git clone https://github.com/pverhaert/syllabot-pro
    ```
 
+> [!NOTE]
+> Please be patient as the initial setup may take 10 or more minutes to complete.
+
 ### Windows Setup
 Run `install.bat` to:
 - Create a virtual environment.
 - Install dependencies.
 - Generate `.env` file.
 - Create `models.py` file.
+
+
 
 ### Linux/macOS Setup
 1. Create and activate a virtual environment named `.venv`.
@@ -54,6 +60,7 @@ Run `install.bat` to:
   - Add to `.env`: `GROQ_API_KEY=your_key`.
 
 - **Gemini API**: Required for `gemini/...` models.
+  - Get key at [Google AI Studio](https://ai.google.dev/gemini-api/docs/api-key).
   - Access via Google AI Studio.
   - Add to `.env`: `GEMINI_API_KEY=your_key`.
 
@@ -107,5 +114,7 @@ Generated courses are stored in `course_history` in both Markdown and Word forma
 > [!TIP]
 > For Markdown viewing:
 > - Install the [Markdown Viewer](https://chromewebstore.google.com/detail/markdown-viewer/ckkdlimhmcjmikdlpkmbgfkaikojcbjk) extension to view the course files in your browser.
-> - Allow the extension to [have access to your local files](https://github.com/simov/markdown-viewer?tab=readme-ov-file#manage-origins).
-> - Drag and drop the a file from the `course_history` folder to your browser.
+> - Open the extension settings:
+>   - **Origins**: enable all options to allow the extension to [have access to your local files](https://github.com/simov/markdown-viewer?tab=readme-ov-file#manage-origins).
+>   - **Settings**: enable all options in the **Content** section.
+> - Drag and drop the Markdown file `course_latest/course.md` into your browser to watch the course generation in real-time.

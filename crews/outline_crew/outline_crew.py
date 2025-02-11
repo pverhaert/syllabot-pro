@@ -19,6 +19,7 @@ class OutlineCrew():
     @agent
     def outline_creator(self) -> Agent:
         tools = [self.search_tool] if self.search_tool else []
+        # print("********** TOOLS ***********\n", tools, "\n***************************\n")
         return Agent(
             llm=self.llm,
             verbose=True,
