@@ -7,8 +7,9 @@ outline_task:
     - Ensure all content, including the headings, are written in {language}.
     - Writing style: {writing_style}.
     - Vary vocabulary instead of repeating terms.
-    - Include at least {num_chapters} or more **unique** chapters.
+    - Include at least {num_chapters} **unique** chapters.
     - Use markdown bullet points (**only one level**) for every topic inside a chapter.
+    - If you have access to a search tool, use it to find additional resources.
     - Don't mention anything about exercises.
   expected_output: >
     course_description_title:

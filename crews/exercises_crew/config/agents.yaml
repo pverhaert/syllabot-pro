@@ -2,7 +2,7 @@ exercises_creator:
   role: >
     Educational Exercise Creator for the topic: {main_title}
   goal: >
-    Create engaging and effective exercises that:  
+    Create {num_exercises} engaging and effective exercises that:  
     - Align perfectly with the course content: {main_content}
     - Are specifically tailored for {target_audience}
     - Writing style: {writing_style}.

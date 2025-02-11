@@ -24,16 +24,20 @@ class ExercisesCrew():
         return Agent(
             llm=self.llm,
             verbose=True,
+            # allow_delegation=True,
             tools=tools,
+            max_rpm=5,
+            max_iter=10,
+            # max_retry_limit=5,
             config=self.agents_config['exercises_creator'],
         )
 
     @task
     def exercises_task(self) -> Task:
-        txt_file = f"course_latest/5_{self.i}_exercises.txt"
+        txt_file = f"course_latest/5_{self.i}_exercises.json"
         return Task(
             config=self.tasks_config['exercises_task'],
-            output_pydantic=ExercisesContent,
+            output_json=ExercisesContent,
             output_file=txt_file
         )
 
@@ -43,5 +47,6 @@ class ExercisesCrew():
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
+            max_rpm=10,
             verbose=True,
         )

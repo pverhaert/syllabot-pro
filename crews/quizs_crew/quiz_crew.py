@@ -25,15 +25,18 @@ class QuizCrew():
             llm=self.llm,
             verbose=True,
             tools=tools,
+            # max_retry_limit=5,
+            max_rpm=5,
+            max_iter=10,
             config=self.agents_config['quiz_creator'],
         )
 
     @task
     def quiz_task(self) -> Task:
-        txt_file = f"course_latest/6_{self.i}_quiz.txt"
+        txt_file = f"course_latest/6_{self.i}_quiz.json"
         return Task(
             config=self.tasks_config['quiz_task'],
-            output_pydantic=QuizContent,
+            output_json=QuizContent,
             output_file=txt_file,
         )
 
@@ -43,5 +46,6 @@ class QuizCrew():
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
+            max_rpm=10,
             verbose=True,
         )

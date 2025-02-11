@@ -5,8 +5,6 @@ from crewai_tools import SerperDevTool
 from common.typings import OneChapter
 
 
-
-
 @CrewBase
 class ChapterCrew():
     agents_config = 'config/agents.yaml'
@@ -27,6 +25,8 @@ class ChapterCrew():
             llm=self.llm,
             verbose=True,
             tools=tools,
+            max_rpm=5,
+            max_iter=10,
             config=self.agents_config['content_creator'],
         )
 
@@ -36,8 +36,8 @@ class ChapterCrew():
         txt_file = f"course_latest/4_{self.i}_course_content.json"
         return Task(
             config=self.tasks_config['content_task'],
-            output_pydantic=OneChapter,
-            output_file= txt_file,
+            output_json=OneChapter,
+            output_file=txt_file,
         )
 
 
@@ -47,5 +47,6 @@ class ChapterCrew():
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
+            max_rpm=10,
             verbose=True,
         )

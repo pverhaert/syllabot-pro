@@ -6,20 +6,19 @@ content_task:
     - Always keep the target audience ({target_audience}) in mind.
     - Include several examples to clarify the theoretical background.
     - Choose the best method (code, formulas, mermaid diagrams) appropriate to the topic to support the examples.
-    - Never use images!
     - Ensure all content, including the titles and examples, are written in {language}.
     - Explain this like you're talking from a teacher to a student. 
     - Writing style: {writing_style}.
     - Vary vocabulary instead of repeating terms.
     - All chapters in this course: {all_chapters}.
     - Use approximately {word_length} words for this chapter!
+    - If you have access to a search tool, use it to find additional information to generate the content.
     - **Don't ask follow-up questions!**
 
   expected_output: >
     "main_title": 
       the main title for this chapter.
     "topics": 
-      a list formatted in the Pydantic model "ChapterContent":
         "sub_title":
           the subtitle of the topic.
         "content":
@@ -27,5 +26,4 @@ content_task:
           - The content should be written in proper markdown format!
           - Don't include the "sub_title" in the content!
           - If the content includes titles, then start from level 5 heading for this (##### title \n\n).
-
   agent: content_creator

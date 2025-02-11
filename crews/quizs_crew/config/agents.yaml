@@ -2,7 +2,7 @@ quiz_creator:
   role: >
     Kahoot-like quiz Creator for the topic: {main_title}
   goal: >
-    Create engaging and effective quiz questions that:  
+    Create {num_quizzes} engaging and effective quiz questions that:  
     - Align perfectly with the course content: {main_content}
     - Are specifically tailored for {target_audience}
     - Writing style: {writing_style}.

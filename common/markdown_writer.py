@@ -82,33 +82,59 @@ class MarkdownWriter:
 
         self.combine_files()
 
-    def add_chapter(self, chapter: OneChapter) -> None:
+    def add_chapter(self, chapter_dict: dict) -> None:
         content_path = self.output_latest_dir / "4_course_content.md"
+
         with content_path.open('a', encoding='utf-8') as f:
-            if chapter:
-                f.write(f"### {chapter.main_title}\n\n")
-                for topic in chapter.topics:
-                    # Replace "\\n" with "\n" in topic.content for propper new-lines
-                    topic_content = topic.content.replace("\\n", "\n")
-                    f.write(f"\n#### {topic.sub_title}\n")
+            if chapter_dict:
+                f.write(f"### {chapter_dict['main_title']}\n\n")
+
+                for topic in chapter_dict['topics']:
+                    # Replace "\\n" with "\n" in topic content for proper new-lines
+                    topic_content = topic['content'].replace("\\n", "\n")
+                    f.write(f"\n#### {topic['sub_title']}\n")
                     f.write(f"\n{topic_content}\n\n")
+
                 f.write(f"\n\n---\n\n")
             else:
                 f.write("\n**OEPS!**\nTHERE IS SOMETHING WRONG WITH THIS CHAPTER :-(\n\n")
                 f.write(f"\n\n---\n\n")
+
         self.combine_files()
 
-    def add_exercise(self, exercises: ExercisesContent) -> None:
+    # def add_chapter(self, chapter: 'OneChapter') -> None:
+    #     content_path = self.output_latest_dir / "4_course_content.md"
+    #
+    #     with content_path.open('a', encoding='utf-8') as f:
+    #         if chapter:
+    #             f.write(f"### {chapter.main_title}\n\n")
+    #
+    #             for topic in chapter.topics:
+    #                 # Replace "\\n" with "\n" in topic content for proper new-lines
+    #                 topic_content = topic.content.replace("\\n", "\n")
+    #                 f.write(f"\n#### {topic.sub_title}\n")
+    #                 f.write(f"\n{topic_content}\n\n")
+    #
+    #             f.write(f"\n\n---\n\n")
+    #         else:
+    #             f.write("\n**OEPS!**\nTHERE IS SOMETHING WRONG WITH THIS CHAPTER :-(\n\n")
+    #             f.write(f"\n\n---\n\n")
+    #
+    #     self.combine_files()
+
+    def add_exercise(self, exercises: dict) -> None:
         content_path = self.output_latest_dir / "5_exercises.md"
         with content_path.open('a', encoding='utf-8') as f:
             if exercises:
-                f.write(f"### {exercises.main_title}\n\n")
-                # Loop through each exercise in the list
-                for exercise in exercises.exercises:
-                    question_content = exercise.question.replace("\\n", "\n")
-                    solution_content = exercise.solution.replace("\\n", "\n")
-                    explanation_content = exercise.explanation.replace("\\n", "\n")
-                    f.write(f"#### {exercise.title}\n\n")
+                f.write(f"### {exercises.get('main_title', 'Exercises')}\n\n")
+                # Loop through each exercise in the exercises list from the dict
+                for exercise in exercises.get('exercises', []):
+                    question_content = exercise.get('question', '').replace("\\n", "\n")
+                    solution_content = exercise.get('solution', '').replace("\\n", "\n")
+                    explanation_content = exercise.get('explanation', '').replace("\\n", "\n")
+                    title_content = exercise.get('title', '').replace("$", "*")
+
+                    f.write(f"#### {title_content}\n\n")
                     f.write(f"{question_content}\n\n")
                     f.write(f"{solution_content}\n\n")
                     f.write(f"{explanation_content}\n\n")
@@ -118,21 +144,45 @@ class MarkdownWriter:
                 f.write(f"\n\n---\n\n")
         self.combine_files()
 
-    def add_quiz(self, quizzes: QuizContent) -> None:
+    # def add_exercise(self, exercises: ExercisesContent) -> None:
+    #     content_path = self.output_latest_dir / "5_exercises.md"
+    #     with content_path.open('a', encoding='utf-8') as f:
+    #         if exercises:
+    #             f.write(f"### {exercises.main_title}\n\n")
+    #             # Loop through each exercise in the list
+    #             for exercise in exercises.exercises:
+    #                 question_content = exercise.question.replace("\\n", "\n")
+    #                 solution_content = exercise.solution.replace("\\n", "\n")
+    #                 explanation_content = exercise.explanation.replace("\\n", "\n")
+    #                 title_content = exercise.title.replace("$", "*")
+    #                 f.write(f"#### {title_content}\n\n")
+    #                 f.write(f"{question_content}\n\n")
+    #                 f.write(f"{solution_content}\n\n")
+    #                 f.write(f"{explanation_content}\n\n")
+    #             f.write(f"\n\n---\n\n")
+    #         else:
+    #             f.write("\n**OEPS!**\nTHERE IS SOMETHING WRONG WITH THIS CHAPTER :-(\n\n")
+    #             f.write(f"\n\n---\n\n")
+    #     self.combine_files()
+
+    def add_quiz(self, quizzes: dict) -> None:
         content_path = self.output_latest_dir / "6_quiz.md"
         with content_path.open('a', encoding='utf-8') as f:
             if quizzes:
-                f.write(f"### {quizzes.main_title}\n\n")
+                f.write(f"### {quizzes.get('main_title', 'Quiz')}\n\n")
                 # Loop through each quiz question in the list
-                for quiz in quizzes.quizzes:
-                    # quiz_content = quiz.title.replace("\\n", "\n")
-                    # quiz_answers = quiz.answers.replace("\\n", "\n")
-                    quiz_correct_answer = quiz.correct_answer.replace("\\n", "\n")
-                    quiz_explanation = quiz.explanation.replace("\\n", "\n")
-                    f.write(f"### {quiz.title}\n\n")
-                    f.write(f"{quiz.question}\n\n")
-                    for answer in quiz.answers:
+                for quiz in quizzes.get('quizzes', []):
+                    quiz_correct_answer = quiz.get('correct_answer', '').replace("\\n", "\n")
+                    quiz_explanation = quiz.get('explanation', '').replace("\\n", "\n")
+                    quiz_title = quiz.get('title', '').replace("$", "*")
+
+                    f.write(f"#### {quiz_title}\n\n")
+                    f.write(f"{quiz.get('question', '')}\n\n")
+
+                    # Handle answers list
+                    for answer in quiz.get('answers', []):
                         f.write(f"- {answer}\n")
+
                     f.write(f"\n\n")
                     f.write(f"{quiz_correct_answer}\n\n")
                     f.write(f"{quiz_explanation}\n\n")
@@ -141,6 +191,31 @@ class MarkdownWriter:
                 f.write("\n**OEPS!**\nTHERE IS SOMETHING WRONG WITH THIS QUIZ :-(\n\n")
                 f.write(f"\n\n---\n\n")
         self.combine_files()
+
+    # def add_quiz(self, quizzes: QuizContent) -> None:
+    #     content_path = self.output_latest_dir / "6_quiz.md"
+    #     with content_path.open('a', encoding='utf-8') as f:
+    #         if quizzes:
+    #             f.write(f"### {quizzes.main_title}\n\n")
+    #             # Loop through each quiz question in the list
+    #             for quiz in quizzes.quizzes:
+    #                 # quiz_content = quiz.title.replace("\\n", "\n")
+    #                 # quiz_answers = quiz.answers.replace("\\n", "\n")
+    #                 quiz_correct_answer = quiz.correct_answer.replace("\\n", "\n")
+    #                 quiz_explanation = quiz.explanation.replace("\\n", "\n")
+    #                 quiz_title = quiz.title.replace("$", "*")
+    #                 f.write(f"### {quiz_title}\n\n")
+    #                 f.write(f"{quiz.question}\n\n")
+    #                 for answer in quiz.answers:
+    #                     f.write(f"- {answer}\n")
+    #                 f.write(f"\n\n")
+    #                 f.write(f"{quiz_correct_answer}\n\n")
+    #                 f.write(f"{quiz_explanation}\n\n")
+    #             f.write(f"\n\n---\n\n")
+    #         else:
+    #             f.write("\n**OEPS!**\nTHERE IS SOMETHING WRONG WITH THIS QUIZ :-(\n\n")
+    #             f.write(f"\n\n---\n\n")
+    #     self.combine_files()
 
     def finalize_course(self, metrics):
         file_path = self.output_latest_dir / "2_metrics.md"

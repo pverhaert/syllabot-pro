@@ -1,26 +1,36 @@
 quiz_task:
   description: >
-    - Create at last {num_quizzes} or more high-quality kahoot-like quiz questions for an educational course about: {main_title}.
-    - Limit the questions to the information this chapter: 
-        {main_content}
+    - Create {num_quizzes} high-quality kahoot-like quiz questions for an educational course about: {main_title},
+      but keep the total word count below 1000 words.
     - Take special needs ({special_needs}) into account to ensure the quizzes are accessible and inclusive. 
     - Always keep the target audience ({target_audience}) in mind.
     - Ensure all content, including the headings and questions, are written in {language}.
     - Wrap all code-examples inside a markdown code-blok.
     - Writing style: {writing_style}.
     - Vary vocabulary instead of repeating terms.
-    - Clearly indicate the difficulty level in the title for the questions by adding asterisks as "\*" (not "*"):
-      - Title of an easy question \*
-      - Title of a medium question \*\*
-      - Title of an advanced question \*\*\*
+    - Clearly indicate the difficulty level in the title for the questions by adding dollar signs as "$":
+      - Title of an easy question $
+      - Title of a medium question $$
+      - Title of an advanced question $$$
     - Every question should have 5 or 6 possible answers, grouped in a list.
     - Every possible answer should start with A, B, ...
+    - Generate content with the following rules:
+      - Use only valid JSON formatting
+      - Escape special characters
+      - Validate against schema before returning
+      - Keep consistent indentation
+      - Use double quotes for strings
     - **Don't ask follow-up questions!**
+    - Limit the questions to the information this chapter: 
+      [CHAPTER CONTENT STARTS HERE]
+      {main_content}
+      [CHAPTER CONTENT ENDS HERE]
+
   expected_output: >
     "main_title": the original main_title (don't change it) 
     "quizzes":
       a list formatted in the Pydantic model "OneQuestion":
-        "title": a short, descriptive title for this exercise, with asterisks
+        "title": a short, descriptive title for this exercise, with dollar signs indicating the difficulty level
         "question": 
           - a markdown formated question, stated with word "_**Question**_\n\n" (but translated to {language})
         "answers":
@@ -33,6 +43,5 @@ quiz_task:
         "explanation":
           - a markdown formated explanation, stated with the translated word "_**Explanation**_\n\n" (but translated to {language})
           - a detailed explanation of the correct answer in plain text, codeblocks or bullet points
-
   agent: quiz_creator
 

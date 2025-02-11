@@ -1,8 +1,7 @@
 exercises_task:
   description: >
-    - Create at least {num_exercises} or more comprehensive learning exercises for an educational course about: {main_title}.
-    - Limit the exercises to the information this chapter: 
-        {main_content}
+    - Create {num_exercises} comprehensive learning exercises for an educational course about: {main_title}, 
+      but keep the total word count below 1000 words.
     - Take special needs ({special_needs}) into account to ensure the exercises are accessible and inclusive. 
     - Always keep the target audience ({target_audience}) in mind.
     - Include several examples to clarify the theoretical background.
@@ -10,16 +9,20 @@ exercises_task:
     - Wrap all code-examples inside a markdown code-blok.
     - Writing style: {writing_style}.
     - Vary vocabulary instead of repeating terms.
-    - Clearly indicate the difficulty level in the title for the exercise by adding asterisks as "\*" (not "*"):
-      - Title of an easy exercise \*
-      - Title of a medium exercise \*\*
-      - Title of an advanced exercise \*\*\*
+    - Clearly indicate the difficulty level in the title for the exercise by adding Dollar signs as "$":
+      - Title of an easy exercise $
+      - Title of a medium exercise $$
+      - Title of an advanced exercise $$$
+    - If you have access to a search tool, use it to find additional information when creating the exercises.
     - **Don't ask follow-up questions!**
+    - Limit the exercises to the information this chapter: 
+      [CHAPTER CONTENT STARTS HERE]
+      {main_content}
+      [CHAPTER CONTENT ENDS HERE]
   expected_output: >
     "main_title": the original main_title (don't change it) 
     "exercises":
-      a list formatted in the Pydantic model "OneExercise":
-        "title": a short, descriptive title for this exercise, with asterisks
+        "title": a short, descriptive title for this exercise, with dollar signs indicating the difficulty level
         "question": a markdown formated question, stated with word "_**Question**_\n\n" (but translated to {language})
         "solution": 
           - a markdown formated solution, stated with the translated word "_**Solution**_\n\n" (but translated to {language})
@@ -27,5 +30,4 @@ exercises_task:
         "explanation": 
           - a markdown formated explanation, stated with the translated word "_**Explanation**_\n\n" (but translated to {language})
           - a detailed explanation to the solution in plain text, codeblocks or bullet points
-
   agent: exercises_creator
