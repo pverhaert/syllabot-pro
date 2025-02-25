@@ -22,7 +22,7 @@ This repository facilitates the creation of educational courses using [CrewAI](h
 
 ### Clone the repository:
    ```bash
-   git clone https://github.com/pverhaert/syllabot-pro
+   git clone https://github.com/pverhaert/syllabot-pro.git
    ```
 
 > [!NOTE]
