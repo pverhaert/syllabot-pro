@@ -5,6 +5,7 @@ import pypandoc
 from rich.console import Console
 
 from common.typings import CourseOutline, ExercisesContent, QuizContent, OneChapter
+from common.mermaid_utils import fix_mermaid_diagrams, validate_mermaid_syntax
 
 console = Console()
 
@@ -92,6 +93,17 @@ class MarkdownWriter:
                 for topic in chapter_dict['topics']:
                     # Replace "\\n" with "\n" in topic content for proper new-lines
                     topic_content = topic['content'].replace("\\n", "\n")
+
+                    # Fix Mermaid diagrams in the content
+                    topic_content = fix_mermaid_diagrams(topic_content)
+
+                    # Validate and warn about potential Mermaid issues
+                    mermaid_warnings = validate_mermaid_syntax(topic_content)
+                    if mermaid_warnings:
+                        console.print(f"⚠️  Mermaid warnings in '{topic['sub_title']}':", style="yellow")
+                        for warning in mermaid_warnings:
+                            console.print(f"   - {warning}", style="dim yellow")
+
                     f.write(f"\n#### {topic['sub_title']}\n")
                     f.write(f"\n{topic_content}\n\n")
 
@@ -134,6 +146,11 @@ class MarkdownWriter:
                     explanation_content = exercise.get('explanation', '').replace("\\n", "\n")
                     title_content = exercise.get('title', '').replace("$", "*")
 
+                    # Fix Mermaid diagrams in all content sections
+                    question_content = fix_mermaid_diagrams(question_content)
+                    solution_content = fix_mermaid_diagrams(solution_content)
+                    explanation_content = fix_mermaid_diagrams(explanation_content)
+
                     f.write(f"#### {title_content}\n\n")
                     f.write(f"{question_content}\n\n")
                     f.write(f"{solution_content}\n\n")
@@ -172,12 +189,18 @@ class MarkdownWriter:
                 f.write(f"### {quizzes.get('main_title', 'Quiz')}\n\n")
                 # Loop through each quiz question in the list
                 for quiz in quizzes.get('quizzes', []):
+                    quiz_question = quiz.get('question', '').replace("\\n", "\n")
                     quiz_correct_answer = quiz.get('correct_answer', '').replace("\\n", "\n")
                     quiz_explanation = quiz.get('explanation', '').replace("\\n", "\n")
                     quiz_title = quiz.get('title', '').replace("$", "*")
 
+                    # Fix Mermaid diagrams in all content sections
+                    quiz_question = fix_mermaid_diagrams(quiz_question)
+                    quiz_correct_answer = fix_mermaid_diagrams(quiz_correct_answer)
+                    quiz_explanation = fix_mermaid_diagrams(quiz_explanation)
+
                     f.write(f"#### {quiz_title}\n\n")
-                    f.write(f"{quiz.get('question', '')}\n\n")
+                    f.write(f"{quiz_question}\n\n")
 
                     # Handle answers list
                     for answer in quiz.get('answers', []):

@@ -6,6 +6,17 @@ content_task:
     - Always keep the target audience ({target_audience}) in mind.
     - Include several examples to clarify the theoretical background.
     - Choose the best method (code, formulas, mermaid version 10.8 diagrams) appropriate to the topic to support the examples.
+    - When using Mermaid diagrams, follow these strict rules:
+      * ALWAYS wrap Mermaid code in a proper markdown code block starting with ```mermaid and ending with ```
+      * Each statement MUST be on a new line (never use semicolons to separate statements)
+      * Use proper Mermaid syntax without semicolons at the end of lines
+      * Example correct format:
+        ```mermaid
+        graph TD
+            A[Start] --> B[Process]
+            B --> C[End]
+        ```
+      * NEVER output Mermaid code as a single line with semicolons
     - Ensure all content, including the titles and examples, are written in {language}.
     - Explain this like you're talking from a teacher to a student. 
     - Writing style: {writing_style}.

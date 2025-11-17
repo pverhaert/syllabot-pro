@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from pydeck.bindings.map_styles import styles
 
 from common.prepare_files import PrepareFiles
+from common.llm_utils import kickoff_with_retry
 from crews.chapter_crew.chapter_crew import ChapterCrew
 from crews.exercises_crew.exercises_crew import ExercisesCrew
 from crews.quizs_crew.quiz_crew import QuizCrew
@@ -106,7 +107,7 @@ class CourseFlow(Flow[CourseState]):
             attr: getattr(self.state.inputs, attr)
             for attr in ['course', 'language']
         }
-        result = crew.crew().kickoff(inputs=inputs)
+        result = kickoff_with_retry(crew.crew().kickoff, inputs)
         # console.print("\n*-*-* RESULT FILENAMES *-*-*-*-\n", result, "\n*-*-*-*-\n")
         console.print("\n*-*-* RESULT FILENAMES PYDANTIC *-*-*-*-\n", result.pydantic, "\n*-*-*-*-\n")
         self.state.titles = result.pydantic
@@ -142,7 +143,7 @@ class CourseFlow(Flow[CourseState]):
             attr: getattr(self.state.inputs, attr)
             for attr in ['course', 'language', 'chapters_that_must_be_included', 'special_needs', 'target_audience', 'num_chapters', 'writing_style']
         }
-        result = crew.crew().kickoff(inputs=inputs)
+        result = kickoff_with_retry(crew.crew().kickoff, inputs)
         pydantic_content = result.pydantic
         console.print("\n*-*-*-*-\n", pydantic_content, "\n*-*-*-*-\n")
         self.state.course_outline = pydantic_content
@@ -172,41 +173,36 @@ class CourseFlow(Flow[CourseState]):
                 f"\nCreating content for chapter {i}/{len(self.state.course_outline.chapters)}: {chapter.title}\n",
                 style="black on yellow")
 
-            # Initialize retry counter
-            retry_count = 0
-            content = {}
-            while retry_count <= 5:
-                # console.print(f"\n***** Retry {retry_count} for chapter {i} *****\n", style="red on white")
-                config = {
-                    "model": self.state.inputs.model,
-                    "temperature": self.state.inputs.temperature,
-                    "include_web_search": self.state.inputs.include_web_search,
-                    "i": i,
-                }
-                crew = ChapterCrew(inputs=config)
-                inputs = {
-                    "course": self.state.inputs.course,
-                    "language": self.state.inputs.language,
-                    "special_needs": self.state.inputs.special_needs,
-                    "target_audience": self.state.inputs.target_audience,
-                    "writing_style": self.state.inputs.writing_style,
-                    'word_length': self.state.inputs.word_length,
-                    "chapter_title": chapter.title,
-                    "chapter_topics": chapter.topics,
-                    "all_chapters": all_chapters_dict,
-                }
-                result = crew.crew().kickoff(inputs=inputs)
+            config = {
+                "model": self.state.inputs.model,
+                "temperature": self.state.inputs.temperature,
+                "include_web_search": self.state.inputs.include_web_search,
+                "i": i,
+            }
+            crew = ChapterCrew(inputs=config)
+            inputs = {
+                "course": self.state.inputs.course,
+                "language": self.state.inputs.language,
+                "special_needs": self.state.inputs.special_needs,
+                "target_audience": self.state.inputs.target_audience,
+                "writing_style": self.state.inputs.writing_style,
+                'word_length': self.state.inputs.word_length,
+                "chapter_title": chapter.title,
+                "chapter_topics": chapter.topics,
+                "all_chapters": all_chapters_dict,
+            }
+
+            try:
+                result = kickoff_with_retry(crew.crew().kickoff, inputs, max_retries=5)
                 content = result.to_dict()
 
-                if content != {}:
-                    break
-                retry_count += 1
-                console.print(f"Empty content received. Retry attempt {retry_count}/5 for chapter {i}", style="red")
-                time.sleep(2)  # Add small delay between retries
-            if content == {}:
-                console.print(f"Failed to generate content for chapter {i} after 5 attempts", style="bold red")
+                if content == {}:
+                    console.print(f"Empty content received for chapter {i}", style="bold red")
+                    continue
+            except Exception as e:
+                console.print(f"Failed to generate content for chapter {i}: {str(e)}", style="bold red")
                 continue
-            # console.print(f"\n***** WHILE ENDED *****\n", style="red on white")
+
             console.print(f"\n*-*-* {i}/{len(self.state.course_outline.chapters)} CHAPTERS CREATED *-*-*-*-\n",
                           content, "\n*-*-*-*-\n")
             self.state.chapters.append(content)
@@ -236,35 +232,30 @@ class CourseFlow(Flow[CourseState]):
 
             # if chapter["main_title"] exists
             if "main_title" in chapter:
-                # Initialize retry counter
-                retry_count = 0
-                content = {}
-                while retry_count <= 5:
-                    main_title = chapter["main_title"]
-                    main_content = ""
-                    for topic in chapter["topics"]:
-                        main_content += f"## {topic['sub_title']}\n\n{topic['content']}\n\n"
-                    inputs = {
-                        # "chapter": chapter,
-                        "language": self.state.inputs.language,
-                        "special_needs": self.state.inputs.special_needs,
-                        "target_audience": self.state.inputs.target_audience,
-                        "writing_style": self.state.inputs.writing_style,
-                        "num_exercises": self.state.inputs.num_exercises,
-                        "main_title": main_title,
-                        "main_content": main_content
-                    }
-                    result = crew.crew().kickoff(inputs=inputs)
+                main_title = chapter["main_title"]
+                main_content = ""
+                for topic in chapter["topics"]:
+                    main_content += f"## {topic['sub_title']}\n\n{topic['content']}\n\n"
+                inputs = {
+                    # "chapter": chapter,
+                    "language": self.state.inputs.language,
+                    "special_needs": self.state.inputs.special_needs,
+                    "target_audience": self.state.inputs.target_audience,
+                    "writing_style": self.state.inputs.writing_style,
+                    "num_exercises": self.state.inputs.num_exercises,
+                    "main_title": main_title,
+                    "main_content": main_content
+                }
+
+                try:
+                    result = kickoff_with_retry(crew.crew().kickoff, inputs, max_retries=5)
                     content = result.to_dict()
 
-                    if content != {}:
-                        break
-                    retry_count += 1
-                    console.print(f"Empty content received. Retry attempt {retry_count}/5 for chapter {i}", style="red")
-                    time.sleep(2)  # Add small delay between retries
-
-                if content == {}:
-                    console.print(f"Failed to generate exercises for chapter {i} after 5 attempts", style="bold red")
+                    if content == {}:
+                        console.print(f"Empty content received for exercises in chapter {i}", style="bold red")
+                        continue
+                except Exception as e:
+                    console.print(f"Failed to generate exercises for chapter {i}: {str(e)}", style="bold red")
                     continue
 
                 console.print(f"\n*-*-* {i}/{len(self.state.course_outline.chapters)} EXERCISES CREATED *-*-*-*-\n",
@@ -289,43 +280,38 @@ class CourseFlow(Flow[CourseState]):
             # console.print("--*---* CHAPTER loop --*\n", chapter, "\n--*---*--*\n")
             # if chapter["main_title"] exists
             if "main_title" in chapter:
-                # Initialize retry counter
-                retry_count = 0
-                content = {}
-                while retry_count <= 5:
-                    config = {
-                        "model": self.state.inputs.model,
-                        "temperature": self.state.inputs.temperature,
-                        "include_web_search": self.state.inputs.include_web_search,
-                        "i": i,
-                    }
-                    crew = QuizCrew(inputs=config)
+                config = {
+                    "model": self.state.inputs.model,
+                    "temperature": self.state.inputs.temperature,
+                    "include_web_search": self.state.inputs.include_web_search,
+                    "i": i,
+                }
+                crew = QuizCrew(inputs=config)
 
-                    main_title = chapter["main_title"]
-                    main_content = ""
-                    for topic in chapter["topics"]:
-                        main_content += f"## {topic['sub_title']}\n\n{topic['content']}\n\n"
-                    inputs = {
-                        # "chapter": chapter,
-                        "language": self.state.inputs.language,
-                        "special_needs": self.state.inputs.special_needs,
-                        "target_audience": self.state.inputs.target_audience,
-                        "writing_style": self.state.inputs.writing_style,
-                        "num_quizzes": self.state.inputs.num_quizzes,
-                        "main_title": main_title,
-                        "main_content": main_content
-                    }
-                    result = crew.crew().kickoff(inputs=inputs)
+                main_title = chapter["main_title"]
+                main_content = ""
+                for topic in chapter["topics"]:
+                    main_content += f"## {topic['sub_title']}\n\n{topic['content']}\n\n"
+                inputs = {
+                    # "chapter": chapter,
+                    "language": self.state.inputs.language,
+                    "special_needs": self.state.inputs.special_needs,
+                    "target_audience": self.state.inputs.target_audience,
+                    "writing_style": self.state.inputs.writing_style,
+                    "num_quizzes": self.state.inputs.num_quizzes,
+                    "main_title": main_title,
+                    "main_content": main_content
+                }
+
+                try:
+                    result = kickoff_with_retry(crew.crew().kickoff, inputs, max_retries=5)
                     content = result.to_dict()
 
-                    if content != {}:
-                        break
-                    retry_count += 1
-                    console.print(f"Empty content received. Retry attempt {retry_count}/5 for chapter {i}", style="red")
-                    time.sleep(2)  # Add small delay between retries
-
-                if content == {}:
-                    console.print(f"Failed to generate quiz questions for chapter {i} after 5 attempts", style="bold red")
+                    if content == {}:
+                        console.print(f"Empty content received for quiz in chapter {i}", style="bold red")
+                        continue
+                except Exception as e:
+                    console.print(f"Failed to generate quiz questions for chapter {i}: {str(e)}", style="bold red")
                     continue
 
                 console.print(f"\n*-*-* {i}/{len(self.state.course_outline.chapters)} QUIZZES CREATED *-*-*-*-\n",
