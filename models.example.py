@@ -1,5 +1,17 @@
 Models = [
     {
+        "model": "gemini/gemini-2.5-flash-lite-preview-09-2025",
+        "max_output_tokens": 8.192,
+        "price_input": 0.1,
+        "price_output": 0.4
+    },
+    {
+        "model": "gemini/gemini-2.5-flash-preview-09-2025",
+        "max_output_tokens": 8.192,
+        "price_input": 0.1,
+        "price_output": 0.4
+    },
+    {
         "model": "gemini/gemini-2.0-flash",
         "max_output_tokens": 8.192,
         "price_input": 0.1,

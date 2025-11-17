@@ -5,7 +5,7 @@ content_task:
     - Take special needs ({special_needs}) into account to ensure the course is accessible and inclusive. 
     - Always keep the target audience ({target_audience}) in mind.
     - Include several examples to clarify the theoretical background.
-    - Choose the best method (code, formulas, mermaid diagrams) appropriate to the topic to support the examples.
+    - Choose the best method (code, formulas, mermaid version 10.8 diagrams) appropriate to the topic to support the examples.
     - Ensure all content, including the titles and examples, are written in {language}.
     - Explain this like you're talking from a teacher to a student. 
     - Writing style: {writing_style}.
