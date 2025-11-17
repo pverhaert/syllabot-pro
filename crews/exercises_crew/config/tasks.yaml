@@ -7,6 +7,7 @@ exercises_task:
     - Include several examples to clarify the theoretical background.
     - Ensure all content, including the headings and examples, are written in {language}.
     - Wrap all code-examples inside a markdown code-blok.
+    - When using Mermaid diagrams, ALWAYS wrap them in ```mermaid code blocks with each statement on a new line (no semicolons).
     - Writing style: {writing_style}.
     - Vary vocabulary instead of repeating terms.
     - Clearly indicate the difficulty level in the title for the exercise by adding Dollar signs as "$":

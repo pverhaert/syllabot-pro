@@ -6,6 +6,7 @@ quiz_task:
     - Always keep the target audience ({target_audience}) in mind.
     - Ensure all content, including the headings and questions, are written in {language}.
     - Wrap all code-examples inside a markdown code-blok.
+    - When using Mermaid diagrams, ALWAYS wrap them in ```mermaid code blocks with each statement on a new line (no semicolons).
     - Writing style: {writing_style}.
     - Vary vocabulary instead of repeating terms.
     - Clearly indicate the difficulty level in the title for the questions by adding dollar signs as "$":
